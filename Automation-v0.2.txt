@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+if [ ! -f "/var/www/html/inventory.html" ]; then
+    cat << EOF > "/var/www/html/inventory.html"
+Log Type         Time Created         Type        Size
+EOF
+
+    echo "/var/www/html/inventory.html created successfully."
+else
+    echo "/var/www/html/inventory.html already exists."
+fi
+
+append_entry() {
+    local log_type=$1
+    local time_created=$2
+    local archive_type=$3
+    local archive_size=$4
+
+    echo -e "$log_type\t$time_created\t$archive_type\t$archive_size" >> "/var/www/html/inventory.html"
+}
+
+log_type="Access Log"
+time_created=$(date +"%Y-%m-%d %H:%M:%S")
+archive_type="tar"
+archive_size="10MB"
+
+append_entry "$log_type" "$time_created" "$archive_type" "$archive_size"
+
+cat "/var/www/html/inventory.html"
